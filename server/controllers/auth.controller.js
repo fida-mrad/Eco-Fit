@@ -94,7 +94,7 @@ const clientController = {
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
-  },
+  },                
   confirmEmail: async (req, res) => {
     try {
       const { client } = jwt.verify(

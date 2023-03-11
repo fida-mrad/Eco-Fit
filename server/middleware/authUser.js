@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 //a middleware fct before action to pass acess
-const auth = (req, res, next) => {
+const authUs = (req, res, next) => {
   try {
     // check accsess token
     const token = req.header("Authorization");
@@ -19,4 +19,4 @@ const auth = (req, res, next) => {
   }
 };
 
-module.exports = auth;
+module.exports = authUs;
