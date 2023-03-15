@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+ import React, {useState} from "react";
 import {authClientApi} from "../../src/services/Api";
 import "../components/Sign.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,8 +20,8 @@ function SignIn() {
         setformFields({...formFields, [name]: value})
     }
     const changeBorderColorOnError = (inputName) => {
-        let formInput = document.getElementById(`${inputName}`);
-        formInput.classList.add("error")
+        let formInput = document.getElementById(`${     inputName}`);
+        formInput?.classList.add("error")
     }
     const handleValidation = () => {
         let error = {}
@@ -69,6 +69,8 @@ function SignIn() {
                                        className="form-control form-control-sm"
                                        placeholder="Password" name="password" value={formFields.password}
                                        onChange={handleInputValueChange}/>
+                                <span className="error-text">{ErrorForms.password}</span>
+
                             </div>
 
                             <div className="form-group form-check">

@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import {authClientApi} from "../../src/services/Api";
 import "../components/Sign.css";
+
+
 const defaultFormFields = {
     firstname: "",
     lastname: "",
@@ -14,6 +16,7 @@ const defaultFormFields = {
 
 function SignUp() {
 
+
     const [formFields, setformFields] = useState(defaultFormFields);
     const [ErrorForms, setErrorForms] = useState({})
     const handleInputValueChange = (event) => {
@@ -22,51 +25,91 @@ function SignUp() {
     }
     const changeBorderColorOnError = (inputName) => {
         let formInput = document.getElementById(`${inputName}`);
-        formInput.classList.add("error")
+        formInput?.classList.add("error")
     }
     const handleValidations = () => {
         let error = {}
+
         if (!formFields.firstname) {
-            error.firstname = "firstname is required !";
+            error.firstname = "Firstname is required !";
             changeBorderColorOnError("firstname");
         }
         if (!formFields.lastname) {
-            error.lastname = "lastname is required !";
+            error.lastname = "Lastname is required !";
             changeBorderColorOnError("lastname");
         }
         if (!formFields.username) {
-            error.userName = "userName is required !";
-            changeBorderColorOnError("userName");
+            error.username = "Username is required !";
+            changeBorderColorOnError("username");
         }
         if (!formFields.email) {
-            error.email = "email is required !";
+            error.email = "Email is required!";
+            changeBorderColorOnError("email");
+        } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formFields.email)) {
+            error.email = "Invalid email address!";
             changeBorderColorOnError("email");
         }
         if (!formFields.password) {
-            error.password = "password is required !";
+            error.password = "Password is required!";
+            changeBorderColorOnError("password");
+        } else if (formFields.password.length < 7) {
+            error.password = "Password must be at least 7 characters long!";
+            changeBorderColorOnError("password");
+        } else if (!/[A-Z]/.test(formFields.password)) {
+            error.password = "Password must contain at least one uppercase letter!";
+            changeBorderColorOnError("password");
+        } else if (!/[a-z]/.test(formFields.password)) {
+            error.password = "Password must contain at least one lowercase letter!";
+            changeBorderColorOnError("password");
+        } else if (!/\d/.test(formFields.password)) {
+            error.password = "Password must contain at least one digit!";
             changeBorderColorOnError("password");
         }
 
         if (!formFields.phone) {
-            error.phone = "phone is required !";
+            error.phone = "Phone number is required!";
+            changeBorderColorOnError("phone");
+        } else if (formFields.phone.length !== 8) {
+            error.phone = "Phone number must be exactly 8 digits long!";
             changeBorderColorOnError("phone");
         }
         if (!formFields.birthdate) {
-            error.BirthDay = "Birthday is required !";
-            changeBorderColorOnError("BirthDay");
+            error.birthdate = "Birthdate is required!";
+            changeBorderColorOnError("birthdate");
+        } else {
+            const birthdate = new Date(formFields.birthdate);
+            const age = calculateAge(birthdate);
+            if (age < 16) {
+                error.birthdate = "You must be at least 16 years old to register!";
+                changeBorderColorOnError("birthdate");
+            }
         }
 
+        function calculateAge(birthday) {
+            const ageDifferenceMs = Date.now() - birthday.getTime();
+            const ageDate = new Date(ageDifferenceMs);
+            return Math.abs(ageDate.getUTCFullYear() - 1970);
+        }
         return error
     }
 
     const handleSubmit = async (event) => {
-        event.preventDefault(); // pour ne pas faire refresh
-        // console.log(formFields);
+        // let error = {}
+        event.preventDefault(); // pour ne pas faire refresh // console.log(formFields);
         setErrorForms(handleValidations())
+        if (Object.keys(ErrorForms).length > 0) {
+            return;
+        }
         console.log(formFields)
         const res = await authClientApi.Register(formFields);
         if (res.status === 200) ;
         console.log("c bon")
+        // if (res.status === 400);
+        // error.email = "email address exist !";
+        // changeBorderColorOnError("email");
+
+
+
 
     }
 
@@ -79,13 +122,14 @@ function SignUp() {
                             <h2 className="text-danger">Register</h2>
                         </div>
 
-                        <form className="mt-6">
+                        <form onSubmit={handleSubmit} className="mt-6">
 
                             <div className="form-group">
                                 <input type="text"
                                        className="form-control form-control-sm"
                                        placeholder="firstname" name="firstname" value={formFields.firstname}
-                                       onChange={handleInputValueChange}/>
+                                       onChange={handleInputValueChange}
+                                />
                                 <span className="error-text">{ErrorForms.firstname}</span>
                             </div>
                             <div className="form-group">
@@ -112,22 +156,29 @@ function SignUp() {
                             <div className="form-group">
                                 <input type="password"
                                        className="form-control form-control-sm"
-                                       placeholder="password" name="password" value={formFields.password} onChange={handleInputValueChange}/>
+                                       placeholder="password" name="password" value={formFields.password}
+                                       onChange={handleInputValueChange}/>
+                                <span className="error-text">{ErrorForms.password}</span>
                             </div>
                             <div className="form-group">
                                 <input type="number"
                                        className="form-control form-control-sm"
-                                       placeholder="phone" name="phone" value={formFields.phone} onChange={handleInputValueChange}/>
+                                       placeholder="phone" name="phone" value={formFields.phone}
+                                       onChange={handleInputValueChange}/>
+                                <span className="error-text">{ErrorForms.phone}</span>
                             </div>
                             <div className="form-group">
                                 <input type="date"
                                        className="form-control form-control-sm"
-                                       placeholder="birthdate" name="birthdate" value={formFields.birthdate} onChange={handleInputValueChange}/>
+                                        name="birthdate" value={formFields.birthdate}
+                                       onChange={handleInputValueChange}/>
+                                <span className="error-text">{ErrorForms.birthdate}</span>
                             </div>
                             <div className="form-group">
                                 <input type="file"
                                        className="form-control form-control-sm"
-                                       placeholder="" name="profileimg" value={formFields.profileimg} onChange={handleInputValueChange}/>
+                                       name="profileimg" value={formFields.profileimg}
+                                       onChange={handleInputValueChange}/>
                             </div>
 
                             <div className="form-group form-check">
@@ -136,9 +187,9 @@ function SignUp() {
                                     me?</label>
                             </div>
 
-                            <div className="mt-5">
-                                <button onClick={handleSubmit} className="btn btn-sm btn-danger col">
-                                    Login
+                            <div className="mt-5 form-group">
+                                <button className="btn btn-sm btn-danger col">
+                                    Register
                                 </button>
                             </div>
 
