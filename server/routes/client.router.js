@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const {authClient} = require('../middleware/auth')
+
 
 
 // import the client controller
 const clientsController = require('../controllers/client.controller');
 
+router.put('/updateClient', authClient,clientsController.updateClient);
+// router.put('/updateClient', clientsController.updateClient);
 
 /**
  * @route GET /client

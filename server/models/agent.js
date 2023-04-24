@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const Brand = new mongoose.Schema({
-  brandname: {
-    type: String,
-    required: true,
-  },
-});
+// const Brand = new mongoose.Schema({
+//   brandname: {
+//     type: String,
+//     required: true,
+//   },
+// });
 const agentSchema = new mongoose.Schema(
   {
     firstname: {
@@ -28,9 +28,14 @@ const agentSchema = new mongoose.Schema(
       required: true,
     },
     brand: {
-      type: Brand,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'brand',
       required: true,
     },
+    // brand: {
+    //   type: Brand,
+    //   required: true,
+    // },
     approved: {
       type: Boolean,
       required: true,
@@ -45,6 +50,11 @@ const agentSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: "Agent",
+    },
+    banned : {
+      type : Boolean,
+      required : true,
+      default : false
     },
   },
   {

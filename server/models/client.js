@@ -49,6 +49,11 @@ const clientSchema = new mongoose.Schema(
       type : Boolean,
       default : false
     },
+    banned : {
+      type : Boolean,
+      required : true,
+      default : false
+    },
     role: {
       type: String,
       required: true,
