@@ -23,7 +23,7 @@ import {
 import CIcon from "@coreui/icons-react";
 
 import avatar from "./../../assets/images/avatars/user.jpg";
-import { authAdmin } from "../../services/authAdminApi";
+import { authAdmin } from "../../Services/authAdminApi";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "../../AdminContext";
 

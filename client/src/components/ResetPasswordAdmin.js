@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useState } from "react";
-import { authAdmin } from "../services/authAdminApi";
+import { authAdmin } from "../Services/authAdminApi";
 
 function ResetPasswordAdmin() {
   let { token } = useParams();

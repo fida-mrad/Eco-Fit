@@ -10,7 +10,7 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from "@coreui/react";
-import { agentController } from "../services/Api";
+import { agentController } from "../Services/Api";
 
 function BrandsList() {
   const [agents, setAgents] = useState([]);

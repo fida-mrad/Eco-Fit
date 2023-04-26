@@ -25,7 +25,7 @@ import {
   cilWarning,
 } from "@coreui/icons";
 import { useNavigate } from "react-router-dom";
-import { authAdmin } from "../../../services/authAdminApi";
+import { authAdmin } from "../../../Services/authAdminApi";
 
 function AdminLogin() {
   const navigate = useNavigate();

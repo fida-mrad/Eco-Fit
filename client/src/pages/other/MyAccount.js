@@ -4,9 +4,9 @@ import Accordion from "react-bootstrap/Accordion";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import { clientController } from "../../services/coreApi";
+import { clientController } from "../../Services/coreApi";
 import { useClient } from "../../ClientContext";
-import { authClientApi } from "../../services/authClientApi";
+import { authClientApi } from "../../Services/authClientApi";
 import {
   CButton,
   CToast,

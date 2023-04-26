@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
 import MenuCart from "./sub-components/MenuCart";
-import { authClientApi } from "../../services/authClientApi";
+import { authClientApi } from "../../Services/authClientApi";
 
 const IconGroup = ({ iconWhiteClass }) => {
   const handleClick = (e) => {

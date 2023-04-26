@@ -10,7 +10,7 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from "@coreui/react";
-import { clientController } from "../services/Api";
+import { clientController } from "../Services/Api";
 
 function ClientsList() {
   const [clients, setClients] = useState([]);

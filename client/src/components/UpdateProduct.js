@@ -8,7 +8,7 @@ import {
   CFormSelect,
   CRow,
 } from "@coreui/react";
-import { productsController } from "../services/Api";
+import { productsController } from "../Services/Api";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 

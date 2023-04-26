@@ -6,7 +6,7 @@ import Nav from "react-bootstrap/Nav";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import { authClientApi } from "../../services/authClientApi";
+import { authClientApi } from "../../Services/Api";
 import {
   CAlert,
   CInputGroup,

@@ -87,6 +87,12 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
               {t("contact_us")}
             </Link>
           </li>
+          <li>
+            <Link to={process.env.PUBLIC_URL + "/claim"}>
+              {t("Claim")}
+            </Link>
+          </li>
+          
         </ul>
       </nav>
     </div>

@@ -19,8 +19,8 @@ import React, { useEffect, useRef, useState } from "react";
 import avatar from "../assets/images/avatars/user.jpg";
 import { useAgent } from "../AgentContext";
 import { useNavigate } from "react-router-dom";
-import { agentController } from "../services/adminApi";
-import { authAgent } from "../services/authAgentApi";
+import { agentController } from "../Services/adminApi";
+import { authAgent } from "../Services/authAgentApi";
 // import avatar from "../assets/images/avatars/2.jpg";
 import {
   cilCheckCircle,

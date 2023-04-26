@@ -1,5 +1,5 @@
 import { useState, useContext, createContext, useEffect } from "react";
-import { authAdmin } from "./services/authAdminApi";
+import { authAdmin } from "./Services/authAdminApi";
 
 const adminContext = createContext({
   admin: null,

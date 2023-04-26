@@ -17,7 +17,7 @@ import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from '../assets/brand/logo'
-import { authAgent } from '../services/Api'
+import { authAgent } from '../Services/Api'
 
 const AppHeader = () => {
   const dispatch = useDispatch()

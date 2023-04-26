@@ -37,6 +37,7 @@ const BlogDetailsStandard = lazy(() =>
 // other pages
 const About = lazy(() => import("./pages/other/About"));
 const Contact = lazy(() => import("./pages/other/Contact"));
+const Claim = lazy(() => import("./pages/other/Claim"));
 const MyAccount = lazy(() => import("./pages/other/MyAccount"));
 const LoginRegister = lazy(() => import("./pages/other/LoginRegister"));
 
@@ -185,6 +186,10 @@ const App = () => {
               <Route
                 path={process.env.PUBLIC_URL + "/contact"}
                 element={<Contact />}
+              />
+              <Route
+                path={process.env.PUBLIC_URL + "/claim"}
+                element={<Claim />}
               />
               <Route
                 path={process.env.PUBLIC_URL + "/my-account"}

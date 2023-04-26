@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useState } from "react";
-import { authAgent } from "../services/authAgentApi";
+import { authAgent } from "../Services/authAgentApi";
 
 function ResetPassword() {
   let { token } = useParams();

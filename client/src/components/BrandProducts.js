@@ -10,7 +10,7 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from "@coreui/react";
-import { productsController } from "../services/Api";
+import { productsController } from "../Services/Api";
 import { useAgent } from "../AgentContext";
 import { useNavigate } from "react-router-dom";
 

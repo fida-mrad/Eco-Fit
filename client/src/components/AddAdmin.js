@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CButton, CCol, CForm, CFormInput, CRow } from "@coreui/react";
-import { adminController } from "../services/Api";
+import { adminController } from "../Services/Api";
 import { useNavigate } from "react-router-dom";
 
 function AddAdmin() {

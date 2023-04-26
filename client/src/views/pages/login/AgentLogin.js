@@ -26,7 +26,7 @@ import {
   cilCheckCircle,
   cilWarning,
 } from "@coreui/icons";
-import { authAgent } from "../../../services/authAgentApi";
+import { authAgent } from "../../../Services/Api";
 import { Link, useNavigate } from "react-router-dom";
 
 function AgentLogin() {

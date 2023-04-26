@@ -16,7 +16,7 @@ import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from "@coreui/icons";
 
 import { AppBreadcrumb } from "./index";
 import { logo } from "../assets/brand/logo";
-import { authAdmin } from "../services/Api";
+import { authAdmin } from "../Services/Api";
 import AdminHeaderDropDown from "./header/AdminHeaderDropDown";
 
 const HeaderAdmin = () => {
