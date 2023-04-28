@@ -45,7 +45,10 @@ class APIfeatures {
 }
 
 const productsController ={
-  getProducts: async(req, res) =>{
+
+    // Méthode pour récupérer tous les produits
+  getAll: async(req, res) =>{
+
     try {
         const features = new APIfeatures(Product.find(), req.query)
         .filtering().sorting().paginating()
@@ -62,18 +65,14 @@ const productsController ={
         return res.status(500).json({msg: err.message})
     }
 },
-        // Méthode pour récupérer tous les produits
-  getAll: async (req, res) => {
-    try {
-      const products = await Product.find();
-      res.status(200).json(products);
-    } catch (err) {
-      res.status(500).json({ message: `Une erreur est survenue lors de la récupération de tous les produits : ${err.message}` });
-    }
-  },
+
+       
+
+ 
   getById: async (req, res) => {
     try {
       const product = await Product.findOne({_id: req.params.productId});
+
       if (!product) {
         res.status(404).json({ message: 'Produit non trouvé' });
       } else {
@@ -83,108 +82,80 @@ const productsController ={
       res.status(500).json({ message: `Une erreur est survenue lors de la récupération du produit avec l'ID ${req.params.id} : ${err.message}` });
     }
   },
-   // Méthode pour ajouter un nouveau produit
-   addProduct: async (req, res) => {
-    //try {
 
-    console.log("hellooooo from product");
+   
+  addProduct: async (req, res) => {
+    try {
+        const { name, price, discount, offerEnd, category, tag, variation, images, shortDescription, fullDescription, materials, brand } = req.body;
 
-    console.log(req.body);
-      
-      const productExists = await Product.findOne({ name: req.body.name });
-      
-      if (productExists) {
-        return res.status(409).json({ message: "Un produit avec cet nom existe déjà." });
-      }
-      
-      const product = new Product({
-        _id: new mongoose.Types.ObjectId(),
-        sku: req.body.sku,
-        name: req.body.name, 
-        price: req.body.price,
-        discount: req.body.discount,
-        offerEnd: new Date(req.body.offerEnd),
-        new: Boolean(req.body.new),
-        rating: req.body.rating,
-        saleCount: req.body.saleCount,
-        quantity: req.body.quantity,
-        size:req.body.size,
-        category: req.body.category,
-        tag: req.body.tag,
-        variation: req.body.variation,
-        image: req.body.image,
-        shortDescription: req.body.shortDescription,
-        fullDescription: req.body.fullDescription,
-      });
+        const product = await Product.findOne({ name });
+        if (product) {
+            return res.status(400).json({ msg: "This product already exists." });
+        }
 
-      console.log(product)
-  
-      //const newProduct = await product.save();
+        const newProduct = new Product({
+          _id: new mongoose.Types.ObjectId(),
+            name,
+            price,
+            discount,
+            offerEnd,
+            category,
+            tag,
+            variation,
+            images,
+            shortDescription,
+            fullDescription,
+            materials,
+            brand
+        });
 
-      product.save()
-          .then(res => {
-              const newItem = res;
-              console.log(newItem);
-          })
-          .catch(err => console.log(err))
-      res.status(201).json({
-          message: 'Created an product using POST request',
-          createdItem: product
-      });
-
-      
-
-  },
+        await newProduct.save();
+        res.json({ msg: "Product created successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Internal server error" });
+    }
+},
   // Méthode pour mettre à jour un produit existant
   updateProduct: async (req, res) => {
     try {
-      const product = await Product.findOne({ _id: req.params.productId });
-      console.log(product);
-
-      if (!product) {
-        res.status(404).json({ message: 'Produit non trouvé' });
-      } else {
-        
-        if (req.body.sku) {
-          product.sku = req.body.sku;
-        }
-        if (req.body.name) {
-          product.name = req.body.name;
-        }
-        if (req.body.price) {
-          product.price = req.body.price;
-        }
-        if (req.body.discount) {
-          product.discount = req.body.discount;
-        }
-        if (req.body.offerEnd) {
-          product.offerEnd = req.body.offerEnd;
-        }
-        if (req.body.new) {
-          product.new = req.body.new;
-        }
-        if (req.body.rating) {
-          product.rating = req.body.rating;
-        }
-        if (req.body.saleCount) {
-          product.saleCount = req.body.saleCount;
-        }
-        if (req.body.category) {
-          product.category = req.body.category;
-        }
-        if (req.body.tag) {
-          product.tag = req.body.tag;
-        }
-        if (req.body.variation) {
-          product.variation = req.body.variation;
-        }
-        const updatedProduct = await product.save();
-        res.status(200).json(updatedProduct);
-      }
+      const { name, price, discount, offerEnd, category, tag, variation, images, shortDescription, fullDescription, materials, brand } = req.body;
+      
+  
+      await Product.findByIdAndUpdate(req.params.id, {
+        name: name ? name.toLowerCase() : '',
+        price,
+        discount,
+        offerEnd,
+        category: Array.isArray(category) ? category : [category],
+        tag: Array.isArray(tag) ? tag : [tag],
+        variation: Array.isArray(variation) ? variation : [variation],
+        images: Array.isArray(images) ? images : [images],
+        shortDescription,
+        fullDescription,
+        materials: Array.isArray(materials) ? materials : [materials],
+        brand
+      }, { new: true });
+     
+  
+      res.json({ msg: "Updated a Product" });
     } catch (err) {
-      res.status(500).json({ message: `Une erreur est survenue lors de la mise à jour du produit avec l'ID ${req.params.id} : ${err.message}` });
+      console.error(err);
+      return res.status(500).json({ msg: "Server error" });
     }
   },
+  deleteProduct: async(req, res) =>{
+    try {
+        await Product.findByIdAndDelete(req.params.id)
+        res.json({msg: "Deleted a Product"})
+    } catch (err) {
+        return res.status(500).json({msg: err.message})
+    }
+},
+
+
+  
+
   createProductReview: async (req, res) => {
     const { name,rating, comment } = req.body;
   

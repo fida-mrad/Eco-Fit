@@ -8,14 +8,10 @@ const cookieSession = require('cookie-session');
 const passportSetup = require("./passport");
 const bodyParser = require('body-parser');
 const passport = require('passport');
-<<<<<<< Updated upstream
+
 const DB = require('./config/dbconnection')
 const stripe = require('stripe')(process.env.STRIPE_SERCRET_KEY);
-=======
 
-
-
->>>>>>> Stashed changes
 
 const load = async () => {
 

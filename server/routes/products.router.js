@@ -6,16 +6,10 @@ const {authAdmin,authAgent} = require('../middleware/auth')
 
 
 router.post('/addProduct',controller.addProduct)
-router.post('/reviews/:id', controller.createProductReview)
-router.get('/getProducts',controller.getProducts)
+//router.post('/reviews/:id', controller.createProductReview)
 router.get('/getall',controller.getAll)
-router.get('/getById/:productId',controller.getById)
-router.put('/updateProduct/:productId',  controller.updateProduct);
-
-
-
-
-
-
+router.get('/getById/:id',controller.getById)
+router.put('/updateProduct/:id',  controller.updateProduct);
+router.delete('/deleteProduct/:id',controller.deleteProduct)
 
 module.exports = router;
