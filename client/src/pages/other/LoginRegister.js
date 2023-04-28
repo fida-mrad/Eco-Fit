@@ -94,6 +94,7 @@ const LoginRegister = () => {
         token: token,
       };
       const res = await authClientApi.login(data);
+      console.log(res);
       if (rememberMe) {
         localStorage.setItem("email", formFields.email);
       } else {

@@ -182,16 +182,38 @@ export const adminController = {
   },
 };
 export const productsController = {
+  // async addProduct(data) {
+  //   return axios
+  //     .post(`${url}/products/addProduct`, data, {
+  //       withCredentials: true,
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     })
+  //     .catch((err) => {
+  //       console.log("This is the data:");
+  //       console.log(data);
+  //       console.log(err);
+  //       return err.response;
+  //     });
+  // },
+
   async addProduct(data) {
-    return axios
-      .post(`${url}/products/addProduct`, data, {
-        withCredentials: true,
+    data = {"name": "assoum"};
+    try {
+      const response = await fetch(`${url}/products/addProduct`, {
+        method: "POST",
+        credentials: "include",
+        body: data,
         headers: { "Content-Type": "multipart/form-data" },
-      })
-      .catch((err) => {
-        console.log(err);
-        return err.response;
       });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      return responseData;
+    } catch (error) {
+      console.error(error);
+      return { error: error.message };
+    }
   },
   async updateProduct(data) {
     return axios

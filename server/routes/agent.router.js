@@ -2,9 +2,9 @@ var express = require("express");
 var router = express.Router();
 const controller = require("../controllers/agent.controller");
 const {authAdmin,authAgent} = require('../middleware/auth')
-const upload = require('../middleware/imageUpload');
 
-router.post('/register', upload.single("profileimg"),controller.register)
+
+//router.post('/register', upload.single("profileimg"),controller.register)
 router.get('/refresh_token', authAgent,controller.refreshToken)
 router.post('/login', controller.login)
 router.get('/logout', controller.logout)

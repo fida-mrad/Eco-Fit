@@ -2,6 +2,7 @@
   "name": "mon-app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@coreui/chartjs": "^3.1.1",
     "@coreui/coreui": "^4.2.6",

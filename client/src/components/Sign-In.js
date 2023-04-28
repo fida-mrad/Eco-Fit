@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
+<<<<<<< Updated upstream
 import { authClientApi } from "../../src/Services/Api";
+=======
+import { authClientApi } from "../services/Api";
+>>>>>>> Stashed changes
 import "../components/Sign.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from "react-router-dom";
