@@ -1,9 +1,6 @@
 import axios from "axios";
 const url = "http://localhost:8000";
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 export const authAgent = {
   async register(data) {
     return await axios

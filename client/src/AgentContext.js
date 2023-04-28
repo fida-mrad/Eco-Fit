@@ -1,9 +1,6 @@
 import { useState, useContext, createContext, useEffect } from "react";
-<<<<<<< Updated upstream
 import { authAgent } from "./Services/Api";
-=======
-import { authAgent } from "./services/authAgentApi";
->>>>>>> Stashed changes
+
 
 const agentContext = createContext({
   agent: null,

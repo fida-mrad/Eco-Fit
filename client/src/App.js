@@ -5,7 +5,8 @@ import "./scss/style.scss";
 import { ProvideClient } from "./ClientContext";
 import SignIn from "./components/Sign-In";
 import ResetPasswordAdmin from "./components/ResetPasswordAdmin";
-
+import CancelPayment from "./paymentComponents/CancelPayment";
+import SuccessPayment from "./paymentComponents/SuccessPayment";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -117,16 +118,12 @@ const App = () => {
               <Route path="reset">
                 <Route path=":token" element={<ForgotPassword />} />
               </Route>
-<<<<<<< Updated upstream
               <Route path="agent/reset">
                 <Route path=":token" element={<ResetPassword />} />
               </Route>
               <Route path="admin/reset">
                 <Route path=":token" element={<ResetPasswordAdmin />} />
               </Route>
-=======
-             
->>>>>>> Stashed changes
 
               {/* Homepages */}
               <Route
@@ -222,6 +219,8 @@ const App = () => {
                 path={process.env.PUBLIC_URL + "/checkout"}
                 element={<Checkout />}
               />
+              <Route path="/success" element={<SuccessPayment />} />
+              <Route path="/cancel" element={<CancelPayment />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
