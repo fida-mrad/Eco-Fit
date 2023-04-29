@@ -3,10 +3,10 @@ import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./scss/style.scss";
 import { ProvideClient } from "./ClientContext";
-import SignIn from "./components/Sign-In";
 import ResetPasswordAdmin from "./components/ResetPasswordAdmin";
 import CancelPayment from "./paymentComponents/CancelPayment";
 import SuccessPayment from "./paymentComponents/SuccessPayment";
+import Chat from "./components/Chat";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -227,6 +227,7 @@ const App = () => {
           </ProvideClient>
         </Suspense>
       </ScrollToTop>
+      <Chat />
     </Router>
   );
 };

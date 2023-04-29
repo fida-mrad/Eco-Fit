@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 const controller = require("../controllers/agent.controller");
 const {authAdmin,authAgent} = require('../middleware/auth')
+const upload = require("./upload")
+
 
 
 //router.post('/register', upload.single("profileimg"),controller.register)

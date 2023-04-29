@@ -1,7 +1,7 @@
 const { mailSender } = require("../helpers/mailSender");
 const createToken = require("../helpers/createToken");
 const bcrypt = require("bcryptjs");
-const User = require("../models/userModel");
+//const User = require("../models/userModel");
 const Client = require("../models/client");
 const Agent = require("../models/agent");
 const Admin = require("../models/admin");

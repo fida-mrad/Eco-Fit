@@ -1,29 +1,8 @@
-<<<<<<< Updated upstream
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-const cors = require("cors");
-const passport = require("passport");
-//require('./passport-config');
-// const session = require('express-session');
-// require('dotenv').config();
-const cookieSession = require("cookie-session");
-// const bodyParser = require('body-parser');
-
-var indexRouter = require("./routes/index");
-var authRouter = require("./routes/auth.router");
-var agentRouter = require("./routes/agent.router");
-var adminRouter = require("./routes/admin.router");
-var clientRouter = require("./routes/client.router");
-var productsRouter = require("./routes/products.router");
-=======
  var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-const fileUpload = require('express-fileupload')
+//const fileUpload = require('express-fileupload')
 var logger = require('morgan');
 const cors = require('cors');
 const passport = require('passport');
@@ -44,7 +23,6 @@ var categoryRouter= require('./routes/category.router');
 
 
 
->>>>>>> Stashed changes
 const db = require("./config/dbconnection");
 var app = express();
 
@@ -52,14 +30,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-<<<<<<< Updated upstream
-app.use(express.static(path.join(__dirname, "public")));
-
-// Initialise a session
-app.use(
-  cookieSession({ name: "session", keys: ["lama"], maxAge: 24 * 60 * 60 * 100 })
-);
-=======
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -84,7 +54,6 @@ app.use(express.urlencoded({ extended: true }));
     app.use(
       cookieSession({ name: "session", keys: ["lama"], maxAge: 24 * 60 * 60 * 100 })
   );
->>>>>>> Stashed changes
 
 // register regenerate & save after the cookieSession middleware initialization
 app.use(function (request, response, next) {
@@ -111,21 +80,6 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-<<<<<<< Updated upstream
-// app.use('/uploads', express.static('uploads'));
-app.use("/images/:path/:filename", (req, res) => {
-  const filename = req.params.filename;
-  // const filePath = path.join(__dirname, 'uploads',filename);
-  const filePath = path.join(__dirname,req.params.path,filename);
-  res.sendFile(filePath);
-});
-app.use("/", indexRouter);
-app.use("/auth", authRouter);
-app.use("/agent", agentRouter);
-app.use("/admin", adminRouter);
-app.use("/client", clientRouter);
-app.use("/products", productsRouter);
-=======
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/agent', agentRouter);
@@ -135,7 +89,6 @@ app.use('/products', productsRouter);
 app.use('/orders', ordersRouter);
 app.use('/categories', categoryRouter);
 app.use('/api', require('./routes/upload'))
->>>>>>> Stashed changes
 
 // login facebook
 app.use(passport.initialize());

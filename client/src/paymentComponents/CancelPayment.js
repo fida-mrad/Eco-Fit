@@ -20,6 +20,6 @@ const CancelPayment = () => {
       </Row>
     </Container>
   )
-}
+}     
 
 export default CancelPayment
