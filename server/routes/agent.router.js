@@ -2,9 +2,11 @@ var express = require("express");
 var router = express.Router();
 const controller = require("../controllers/agent.controller");
 const {authAdmin,authAgent} = require('../middleware/auth')
-const upload = require('../middleware/imageUpload');
+const upload = require("./upload")
 
-router.post('/register', upload.single("profileimg"),controller.register)
+
+
+//router.post('/register', upload.single("profileimg"),controller.register)
 router.get('/refresh_token', authAgent,controller.refreshToken)
 router.post('/login', controller.login)
 router.get('/logout', controller.logout)
@@ -15,7 +17,7 @@ router.get('/getall', controller.getAgents)
 router.post('/forgot',controller.forgot)
 router.post('/reset',controller.reset)
 router.post('/change',authAgent,controller.change)
-router.put('/updateAgent',upload.single("profileimg"),authAgent,controller.updateAgent)
+// router.put('/updateAgent',upload.single("profileimg"),authAgent,controller.updateAgent)
 
 
 

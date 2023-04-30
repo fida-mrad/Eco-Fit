@@ -4,11 +4,14 @@ const morgan = require('morgan');
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
+
 const passportSetup = require("./passport");
 const bodyParser = require('body-parser');
 const passport = require('passport');
+
 const DB = require('./config/dbconnection')
 const stripe = require('stripe')(process.env.STRIPE_SERCRET_KEY);
+
 
 const load = async () => {
 
@@ -19,10 +22,24 @@ const load = async () => {
     app.use(cookieParser());
     app.use(morgan('dev'));
 
-    await DB.open()
-            .then(() => console.info(`MongoDB is connected`))
-            .catch(() => console.error(`Unable to open database connection...`));
+   
 
+// app.use(fileUpload({
+//   useTempFiles: true
+// }))
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+    dotenv.config();
+
+    mongoose
+        .connect(process.env.MONGODB_URI)
+        .then(() => {
+        console.log("connected to db");
+        })
+        .catch((err) => {
+        console.log(err.message);
+        });
 
     // Initialise a session
     app.use(
@@ -49,13 +66,15 @@ const load = async () => {
     app.use(passport.session());
 
     // Handeling CORS
-    app.use(
-        cors({
-          origin: "http://localhost:3000",
-          methods: "GET,POST,PUT,DELETE",
-          credentials: true,
-        })
-      );
+    app.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', '*');
+        if (req.method === 'OPTIONS') {
+            res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+            return res.status(200).json({});
+        }
+        next();
+    });
 
     // Connecting to the routes
     const clientRoutes = require('./routes/client.router');
@@ -63,6 +82,20 @@ const load = async () => {
 
     const authRoute = require('./routes/auth.router');
     app.use('/auth', authRoute)
+    
+    const productsRouter = require('./routes/products.router');
+    app.use('/products', productsRouter);
+    
+    const ordersRouter = require('./routes/orders.router');
+    app.use('/orders', ordersRouter );
+
+
+    const categoryRouter = require('./routes/category.router');
+    app.use('/categories', categoryRouter );
+
+  
+
+
 
     // Handling failed routes
     app.use((req, res, next) => {

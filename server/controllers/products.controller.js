@@ -2,161 +2,191 @@ const Product = require("../models/product");
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const Brand = require("../models/brand");
-const productsController = {
-  getAll: async (req, res) => {
-    const products = await Product.find();
-    return res.status(200).send(products);
-  },
-  getByBrand: async (req, res) => {
-    const brandIdString = req.body.brandId;
+// Filter, sorting and paginating
+
+class APIfeatures {
+  constructor(query, queryString){
+      this.query = query;
+      this.queryString = queryString;
+  }
+  filtering(){
+     const queryObj = {...this.queryString} //queryString = req.query
+
+     const excludedFields = ['page', 'sort', 'limit']
+     excludedFields.forEach(el => delete(queryObj[el]))
+     
+     let queryStr = JSON.stringify(queryObj)
+     queryStr = queryStr.replace(/\b(gte|gt|lt|lte|regex)\b/g, match => '$' + match)
+
+
+     this.query.find(JSON.parse(queryStr))
+       
+     return this;
+  }
+
+  sorting(){
+      if(this.queryString.sort){
+          const sortBy = this.queryString.sort.split(',').join(' ')
+          this.query = this.query.sort(sortBy)
+      }else{
+          this.query = this.query.sort('-createdAt')
+      }
+
+      return this;
+  }
+
+  paginating(){
+      const page = this.queryString.page * 1 || 1
+      const limit = this.queryString.limit * 1 || 9
+      const skip = (page - 1) * limit;
+      this.query = this.query.skip(skip).limit(limit)
+      return this;
+  }
+}
+
+const productsController ={
+
+    // Méthode pour récupérer tous les produits
+  getAll: async(req, res) =>{
+
     try {
-      const brandId = mongoose.Types.ObjectId(brandIdString);
-      Product.find({ brand: brandId })
-        .populate("brand")
-        // .lean()
-        .exec((err, products) => {
-          if (err) {
-            console.log(err);
-            return res.status(400).send({ msg: "No Products Found" });
-          } else {
-            if (!products)
-              return res.status(400).send({ msg: "No Products Found" });
-            // const jsonProducts = JSON.stringify(products);
-            // console.log(jsonProducts);
-            res.status(200).send(products);
-          }
-        });
+        const features = new APIfeatures(Product.find(), req.query)
+        .filtering().sorting().paginating()
+
+        const products = await features.query
+
+        res.json({
+            status: 'success',
+            result: products.length,
+            products: products
+        })
+        
     } catch (err) {
-      return res.status(500).send({ msg: err.message });
+        return res.status(500).json({msg: err.message})
     }
-  },
+},
+
+       
+
+ 
   getById: async (req, res) => {
     try {
-      const idString = req.body.productId;
-      const id = mongoose.Types.ObjectId(idString);
-      Product.find({ _id: id })
-        .populate("brand")
-        .exec((err, product) => {
-          if (err) {
-            console.log(err);
-            return res.status(400).send({ msg: "Product Not Found" });
-          } else {
-            if (!product) return res.status(400).send({ msg: "Product Not Found" });
-            res.status(200).send(product);
-          }
-        });
-    } catch (error) {
-      return res.status(500).send({ msg: error.message });
-    }
-  },
-  addProduct: async (req, res) => {
-    const name = req.body.name;
-    const price = req.body.price;
-    const ref = req.body.ref;
-    const size = req.body.size;
-    const imageFiles = req.files;
-    const images = imageFiles.map((file) => {
-      return file.path;
-    });
-    const description = req.body.description;
-    const quantity = req.body.quantity;
-    const category = req.body.category;
-    const materials = req.body.materials;
-    const colors = req.body.colors;
-    const brand = req.body.brand;
-    if (
-      !name ||
-      !price ||
-      !ref ||
-      !size ||
-      !images ||
-      !description ||
-      !quantity ||
-      !category ||
-      !materials ||
-      !colors ||
-      !brand
-    )
-      return res.status(400).json({ msg: "Please fill in all fields." });
-    const product = await Product.findOne({ ref });
-    if (product)
-      return res.status(400).json({ msg: "Product already exists." });
-    try {
-      const newProduct = new Product({
-        name: name,
-        price: price,
-        ref: ref,
-        size: size,
-        images: images,
-        description: description,
-        quantity: quantity,
-        category: category,
-        materials: materials,
-        colors: colors,
-        brand: brand,
-      });
-      await newProduct.save();
-      return res.status(201).json({
-        msg: "Product Added Successfully.",
-      });
-    } catch (err) {
-      return res.status(500).json({ msg: err.message });
-    }
-  },
-  updateProduct: async (req, res) => {
-    const id = req.body.id;
-    Product.findOne({ _id: id }, function (err, product) {
-      // Handle errors
-      if (err) {
-        // console.error(err);
-        console.log("Error in Product.find : ");
-        console.log(err);
-        return res.status(500).send(err.message);
-      }
+      const product = await Product.findOne({_id: req.params.productId});
 
-      // Handle product not found
       if (!product) {
-        return res.status(404).send("Product not found");
+        res.status(404).json({ message: 'Produit non trouvé' });
+      } else {
+        res.status(200).json(product);
       }
-      updatedAttributes = _.omit(req.body, "id");
-      // Update the object based on the attributes in the request body
-      // for (let attr in updatedAttributes) {
-      //   product[attr] = updatedAttributes[attr];
-      // }
-      if (req.files) {
-        const imageFiles = req.files;
-        const images = imageFiles.map((file) => {
-          return file.path;
-        });
-        product.images = images;
-      }
-      for (let attr in updatedAttributes) {
-        const value = updatedAttributes[attr];
-
-        // Use array index notation to update array elements
-        if (attr.includes(".")) {
-          const [arrAttr, index] = attr.split(".");
-          product[arrAttr].splice(index, 1, value);
-        } else {
-          product[attr] = value;
-        }
-      }
-
-      // Save the updated object in the database
-      product.save(function (err, updatedProduct) {
-        // Handle errors
-        if (err) {
-          // console.error(err);
-          console.log("Error in product.save : ");
-          console.log(err);
-          return res.status(500).send(err.message);
-        }
-
-        // Send the updated object in the response
-        // console.log(updatedProduct);
-        res.status(201).send({ msg: "Product Updated Successfully" });
-      });
-    });
+    } catch (err) {
+      res.status(500).json({ message: `Une erreur est survenue lors de la récupération du produit avec l'ID ${req.params.id} : ${err.message}` });
+    }
   },
-};
+
+   
+  addProduct: async (req, res) => {
+    try {
+        const { name, price, discount, offerEnd, category, tag, variation, images, shortDescription, fullDescription, materials, brand } = req.body;
+
+        const product = await Product.findOne({ name });
+        if (product) {
+            return res.status(400).json({ msg: "This product already exists." });
+        }
+
+        const newProduct = new Product({
+          _id: new mongoose.Types.ObjectId(),
+            name,
+            price,
+            discount,
+            offerEnd,
+            category,
+            tag,
+            variation,
+            images,
+            shortDescription,
+            fullDescription,
+            materials,
+            brand
+        });
+
+        await newProduct.save();
+        res.json({ msg: "Product created successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Internal server error" });
+    }
+},
+  // Méthode pour mettre à jour un produit existant
+  updateProduct: async (req, res) => {
+    try {
+      const { name, price, discount, offerEnd, category, tag, variation, images, shortDescription, fullDescription, materials, brand } = req.body;
+      
+  
+      await Product.findByIdAndUpdate(req.params.id, {
+        name: name ? name.toLowerCase() : '',
+        price,
+        discount,
+        offerEnd,
+        category: Array.isArray(category) ? category : [category],
+        tag: Array.isArray(tag) ? tag : [tag],
+        variation: Array.isArray(variation) ? variation : [variation],
+        images: Array.isArray(images) ? images : [images],
+        shortDescription,
+        fullDescription,
+        materials: Array.isArray(materials) ? materials : [materials],
+        brand
+      }, { new: true });
+     
+  
+      res.json({ msg: "Updated a Product" });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ msg: "Server error" });
+    }
+  },
+  deleteProduct: async(req, res) =>{
+    try {
+        await Product.findByIdAndDelete(req.params.id)
+        res.json({msg: "Deleted a Product"})
+    } catch (err) {
+        return res.status(500).json({msg: err.message})
+    }
+},
+
+
+  
+
+  createProductReview: async (req, res) => {
+    const { name,rating, comment } = req.body;
+  
+    try {
+      const product = await Product.findOne({ _id: req.params.id });
+  
+      const review = {
+        name,
+        rating: Number(rating),
+        comment,
+        
+      };
+  
+      product.reviews.push(review);
+      product.numReviews = product.reviews.length;
+  
+      const ratingSum = product.reviews.reduce((acc, item) => acc + item.rating, 0);
+      product.rating = ratingSum / product.reviews.length;
+  
+      await product.save();
+  
+      res.status(201).json({ message: 'Review added' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  
+
+
+
+
+
+}
 module.exports = productsController;

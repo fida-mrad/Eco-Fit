@@ -1,16 +1,18 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-const cors = require("cors");
-const passport = require("passport");
+ var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+//const fileUpload = require('express-fileupload')
+var logger = require('morgan');
+const cors = require('cors');
+const passport = require('passport');
 //require('./passport-config');
 // const session = require('express-session');
 // require('dotenv').config();
-const cookieSession = require("cookie-session");
-// const bodyParser = require('body-parser');
-
+const cookieSession = require('cookie-session');
+const bodyParser = require('body-parser');
+var ordersRouter = require('./routes/orders.router');
+var categoryRouter= require('./routes/category.router');
 var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth.router");
 var agentRouter = require("./routes/agent.router");
@@ -25,12 +27,30 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+// app.use(fileUpload({
+//   useTempFiles: true
+// }))
 
-// Initialise a session
-app.use(
-  cookieSession({ name: "session", keys: ["lama"], maxAge: 24 * 60 * 60 * 100 })
-);
+// Handeling CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  if (req.method === 'OPTIONS') {
+      res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+      return res.status(200).json({});
+  }
+  next();
+});
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+    // Initialise a session
+    app.use(
+      cookieSession({ name: "session", keys: ["lama"], maxAge: 24 * 60 * 60 * 100 })
+  );
 
 // register regenerate & save after the cookieSession middleware initialization
 app.use(function (request, response, next) {
@@ -71,6 +91,10 @@ app.use("/admin", adminRouter);
 app.use("/client", clientRouter);
 app.use("/products", productsRouter);
 app.use("/blogs" , blogsRouter);
+app.use('/orders', ordersRouter);
+app.use('/categories', categoryRouter);
+app.use('/api', require('./routes/upload'))
+
 
 // login facebook
 app.use(passport.initialize());
