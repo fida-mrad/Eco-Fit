@@ -33,6 +33,7 @@ const BlogRightSidebar = lazy(() => import("./pages/blog/BlogRightSidebar"));
 const BlogDetailsStandard = lazy(() =>
   import("./pages/blog/BlogDetailsStandard")
 );
+const BlogNew = lazy(() =>import("./wrappers/blog/AddBlog"));
 
 // other pages
 const About = lazy(() => import("./pages/other/About"));
@@ -177,6 +178,15 @@ const App = () => {
                 path={process.env.PUBLIC_URL + "/blog-details-standard"}
                 element={<BlogDetailsStandard />}
               />
+              <Route
+                  path={process.env.PUBLIC_URL + "/blog-new"}
+                  element={<BlogNew />}
+              />
+              <Route
+                  path={process.env.PUBLIC_URL + "/blog-details-standard/:id"}
+                  element={<BlogDetailsStandard />}
+              />
+
 
               {/* Other pages */}
               <Route

@@ -206,6 +206,7 @@ const clientController = {
         id: client._id,
         role: client.role,
       });
+      console.log(refreshtoken)
       res.header("Access-Control-Allow-Origin", "http://localhost:3000");
       res.header(
         "Access-Control-Allow-Headers",
