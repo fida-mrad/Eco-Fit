@@ -20,9 +20,9 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
     <Provider store={store}>
-      <PersistProvider>
+      {/* <PersistProvider> */}
         <App />
-      </PersistProvider>
+      {/* </PersistProvider> */}
     </Provider>
 );
 
