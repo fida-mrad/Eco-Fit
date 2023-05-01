@@ -12,6 +12,34 @@ const Checkout = () => {
   let { pathname } = useLocation();
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
+  const ItemsProd = [
+    {
+    id:"price_1MxYsTEXYQfbBZFawbRuVC62",
+    quantity:3
+  },
+  {
+
+  }
+]
+  
+  const checkout = async () => {
+    await fetch('http://localhost:4000/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ items: ItemsProd }),
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((response) => {
+        if (response.url) {
+          window.location.assign(response.url) // Forwarding user to Stripe
+        }
+      })
+  }
+
 
   return (
     <Fragment>
@@ -197,7 +225,7 @@ const Checkout = () => {
                       <div className="payment-method"></div>
                     </div>
                     <div className="place-order mt-25">
-                      <button className="btn-hover">Place Order</button>
+                      <button className="btn-hover" onClick={checkout}>Place Order</button>
                     </div>
                   </div>
                 </div>
