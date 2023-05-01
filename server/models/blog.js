@@ -1,9 +1,22 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+
+
+const commentSchema = new mongoose.Schema({
+    author: {
+        type: String,
+        required: true
+    },
+    text: {
+        type: String,
+        required: true
+    }
+}, { timestamps: true });
+
 const blogSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
-    },    
+    },
     description: {
         type: String,
         required: true
@@ -13,18 +26,19 @@ const blogSchema = new mongoose.Schema({
         required: true
     },
     images: {
-        type: [String],
+        type: String,
         required: true
     },
-    author:{
-        type : String,
-        required : true
-    },
-    date : {
-        type: Date,
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'client',
         required: true,
-        default : Date.now()
     },
+    comments: [commentSchema],
 
-})
-module.exports = mongoose.model('blog', blogSchema);
+},
+    { timestamps: true }
+
+);
+
+module.exports = mongoose.model('Blog', blogSchema);

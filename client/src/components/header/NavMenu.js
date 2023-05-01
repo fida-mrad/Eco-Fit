@@ -67,7 +67,7 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
                       <img
                         src={
                           process.env.PUBLIC_URL +
-                          "/assets/img/banner/banner-12.png"
+                          "/assets/img/banner/banner-12 (1).webp"
                         }
                         alt=""
                       />
@@ -80,7 +80,60 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
           <li>
             <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
               {t("Blogs")}
+              {sidebarMenu ? (
+                  <span>
+                  <i className="fa fa-angle-right"></i>
+                </span>
+              ) : (
+                  <i className="fa fa-angle-down" />
+              )}
             </Link>
+            <ul className="mega-menu">
+              <li>
+                <ul>
+                  <li className="mega-menu-title">
+                    <Link to={process.env.PUBLIC_URL }>
+                      {t("Blogs")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
+                      {t("Our Blogs")}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <ul>
+                  <li className="mega-menu-title">
+                    <Link to={process.env.PUBLIC_URL }>
+                      {t("Add blog")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={process.env.PUBLIC_URL + "blog-new"}>
+                      {t("New blog")}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <ul>
+                  <li className="mega-menu-img">
+                    <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                      <img
+                          src={
+                              process.env.PUBLIC_URL +
+                              "/assets/img/banner/banner-12 (1).webp"
+                          }
+                          alt=""
+                      />
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
           </li>
           <li>
             <Link to={process.env.PUBLIC_URL + "/contact"}>

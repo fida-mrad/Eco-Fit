@@ -11,18 +11,15 @@ const passport = require('passport');
 // require('dotenv').config();
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
-
-var indexRouter = require('./routes/index');
-var authRouter = require('./routes/auth.router');
-var agentRouter = require('./routes/agent.router');
-var adminRouter = require('./routes/admin.router');
-var clientRouter = require('./routes/client.router')
-var productsRouter = require('./routes/products.router')
 var ordersRouter = require('./routes/orders.router');
 var categoryRouter= require('./routes/category.router');
-
-
-
+var indexRouter = require("./routes/index");
+var authRouter = require("./routes/auth.router");
+var agentRouter = require("./routes/agent.router");
+var adminRouter = require("./routes/admin.router");
+var clientRouter = require("./routes/client.router");
+var productsRouter = require("./routes/products.router");
+var blogsRouter = require("./routes/blog.router");
 const db = require("./config/dbconnection");
 var app = express();
 
@@ -80,15 +77,24 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/agent', agentRouter);
-app.use('/admin', adminRouter);
-app.use('/client', clientRouter);
-app.use('/products', productsRouter);
+// app.use('/uploads', express.static('uploads'));
+app.use("/images/:path/:filename", (req, res) => {
+  const filename = req.params.filename;
+  // const filePath = path.join(__dirname, 'uploads',filename);
+  const filePath = path.join(__dirname,req.params.path,filename);
+  res.sendFile(filePath);
+});
+app.use("/", indexRouter);
+app.use("/auth", authRouter);
+app.use("/agent", agentRouter);
+app.use("/admin", adminRouter);
+app.use("/client", clientRouter);
+app.use("/products", productsRouter);
+app.use("/blogs" , blogsRouter);
 app.use('/orders', ordersRouter);
 app.use('/categories', categoryRouter);
 app.use('/api', require('./routes/upload'))
+
 
 // login facebook
 app.use(passport.initialize());
