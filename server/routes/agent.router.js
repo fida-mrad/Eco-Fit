@@ -17,7 +17,7 @@ router.get('/getall', controller.getAgents)
 router.post('/forgot',controller.forgot)
 router.post('/reset',controller.reset)
 router.post('/change',authAgent,controller.change)
-router.put('/updateAgent',upload.single("profileimg"),authAgent,controller.updateAgent)
+//router.put('/updateAgent',upload.single("profileimg"),authAgent,controller.updateAgent)
 
 
 
