@@ -25,7 +25,10 @@ const BlogPosts = () => {
                     <div className="blog-wrap-2 mb-30">
                         <div className="blog-img-2">
                             <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>
-                                <img src={`http://localhost:8000/uploads/${blog.imagePath}`} alt="" />
+                                <img
+                                    src={ "http://localhost:8000/uploads/" + blog.images[0]}
+                                    alt=""
+                                />
                             </Link>
                         </div>
                         <div className="blog-content-2">

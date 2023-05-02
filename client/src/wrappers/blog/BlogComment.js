@@ -1,44 +1,72 @@
-import React, { Fragment } from "react";
+import React, {Fragment, useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import {blogsController} from "../../Services/blogsApi";
 
 const BlogComment = () => {
+  const { id } = useParams();
+  const [blog, setBlog] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const response = await blogsController.getBlogById(id);
+        console.log(response.data);
+        setBlog(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchBlog();
+  }, [id]);
   return (
     <Fragment>
       <div className="blog-comment-wrapper mt-55">
-        <h4 className="blog-dec-title">comments : 02</h4>
-        <div className="single-comment-wrapper mt-35">
-          <div className="blog-comment-img">
-            <img
-              src={process.env.PUBLIC_URL + "/assets/img/blog/comment-1.jpg"}
-              alt=""
-            />
-          </div>
-          <div className="blog-comment-content">
-            <h4>Anthony Stephens</h4>
-            <span>October 14, 2018 </span>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-              eiusmod tempor incididunt ut labore et dolor magna aliqua. Ut enim
-              ad minim veniam,{" "}
-            </p>
-          </div>
-        </div>
-        <div className="single-comment-wrapper mt-50 ml-120">
-          <div className="blog-comment-img">
-            <img
-              src={process.env.PUBLIC_URL + "/assets/img/blog/comment-2.jpg"}
-              alt=""
-            />
-          </div>
-          <div className="blog-comment-content">
-            <h4>DX Joxova</h4>
-            <span>October 14, 2018 </span>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-              eiusmod tempor incididunt ut labore et dolor magna aliqua. Ut enim
-              ad minim veniam,{" "}
-            </p>
-          </div>
-        </div>
+        <h4 className="blog-dec-title">comments : {blog?.comments?.length}</h4>
+        {blog.comments?.map((c,index)=>{
+          let formattedDate = new Date(c.createdAt).toLocaleDateString();
+
+          return (
+              <>
+                {index %2===0 ?
+                    <div className="single-comment-wrapper mt-35">
+                      <div className="blog-comment-img">
+                        <img
+                            src={process.env.PUBLIC_URL + "/assets/img/blog/comment-1.jpg"}
+                            alt=""
+                        />
+                      </div>
+                      <div className="blog-comment-content">
+                        <h4>{c.author}</h4>
+                        <span>{formattedDate}</span>
+                        <p>
+                          {c.text}{" "}
+                        </p>
+                      </div>
+                    </div>
+                    :
+                    <div className="single-comment-wrapper mt-50 ml-120">
+                      <div className="blog-comment-img">
+                        <img
+                            src={process.env.PUBLIC_URL + "/assets/img/blog/comment-2.jpg"}
+                            alt=""
+                        />
+                      </div>
+                      <div className="blog-comment-content">
+                        <h4>{c.author}</h4>
+                        <span>{formattedDate}</span>
+                        <p>{c.text}{" "}
+                        </p>
+                      </div>
+                    </div>
+                }
+
+
+              </>
+          )
+        })}
       </div>
       <div className="blog-reply-wrapper mt-50">
         <h4 className="blog-dec-title">post a comment</h4>

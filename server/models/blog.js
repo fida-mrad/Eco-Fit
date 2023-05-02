@@ -10,35 +10,42 @@ const commentSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-}, { timestamps: true });
+}, {timestamps: true});
 
 const blogSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    body: {
-        type: String,
-        required: true
-    },
-    images: {
-        type: String,
-        required: true
-    },
-    author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'client',
-        required: true,
-    },
-    comments: [commentSchema],
+        title: {
+            type: String,
+            required: true
+        },
+        description: {
+            type: String,
+            required: true
+        },
+        description2: {
+            type: String,
+            required: true
+        },
+        description3: {
+            type: String,
+            required: true
+        },
+        body: {
+            type: String,
+            required: true
+        },
 
-},
-    { timestamps: true }
+        images:[ String],
 
+
+        author: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'client',
+            required: false,
+        },
+        comments: [commentSchema],
+
+    },
+    {timestamps: true}
 );
 
 module.exports = mongoose.model('Blog', blogSchema);

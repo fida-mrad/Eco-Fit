@@ -1,10 +1,60 @@
-import {Fragment} from "react";
+import {Fragment, useState} from "react";
 import {useLocation} from "react-router-dom";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import { blogsController } from "../../Services/blogsApi";
+import axios from "axios";
 
-const Contact = () => {
+
+const Blog = () => {
     let {pathname} = useLocation();
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [description2, setDescription2] = useState('');
+    const [description3, setDescription3] = useState('');
+    const [body, setBody] = useState('');
+    const [images, setImages] = useState([]);
+
+    const handleFileInput =  async (e) => {
+        const files = e.target.files;
+        const data =  new FormData;
+
+        for (let i=0  ; i< files.length ; i++){
+            data.append("photos" , files[i])
+        }
+        const response = await axios.post(`http://localhost:8000/blogs/uploadByFile`, data , {
+            headers : {
+                "Content-Type" : "multipart/form-data"
+            },
+        });
+
+        const {data : filenames} = response;
+        setImages((prevValue)=> [... prevValue , ... filenames] )
+        e.target.value="";
+
+    };
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            let data = {
+                title,
+                description,
+                description2,
+                description3,
+                body,
+                images : images
+            }
+           await axios.post(`http://localhost:8000/blogs/addBlog`, data).then(
+               ()=>{
+                   window.location.href = "/blog-new";
+               }
+           )
+            alert('Blog added successfully!');
+        } catch (error) {
+            console.error(error);
+            alert('Failed to add blog. Please try again.');
+        }
+    };
 
     return (
         <Fragment>
@@ -17,6 +67,7 @@ const Contact = () => {
                         {label: "Add new blog", path: process.env.PUBLIC_URL + pathname}
                     ]}
                 />
+
                 <div>
                     <div className="container">
                         <div className="custom-row-2">
@@ -92,28 +143,44 @@ const Contact = () => {
                                     <div className="contact-title mb-30">
                                         <h2>Add a new blog here ...</h2>
                                     </div>
-                                    <form className="contact-form-style">
+                                    <form onSubmit={handleSubmit} className="contact-form-style" enctype="multipart/form-data">
                                         <div className="row">
                                             <div className="col-lg-12">
-                                                <input name="title" placeholder="title*" type="text"/>
+                                                <input placeholder="Titre" type="text" id="title" value={title} onChange={(event) => setTitle(event.target.value)} required />                                            </div>
+                                            <div className="col-lg-12">
+                                                <input placeholder="Premiere description" type="text" id="description" value={description} onChange={(event) => setDescription(event.target.value)} required />
                                             </div>
                                             <div className="col-lg-12">
-                                                <input
-                                                    name="description"
-                                                    placeholder="description*"
-                                                    type="text"
-                                                />
+                                                <input placeholder="Deuxieme description" type="text" id="description2" value={description2} onChange={(event) => setDescription2(event.target.value)} required />
                                             </div>
                                             <div className="col-lg-12">
-                        <textarea
-                            name="body"
-                            placeholder="Your Blog body*"
-                            defaultValue={""}
-                        />
+                                                <input placeholder="troisième description" type="text" id="description3" value={description3} onChange={(event) => setDescription3(event.target.value)} required />
+                                            </div>
+                                            <div className="col-lg-12">
+                                                <textarea placeholder="Body" id="body" value={body} onChange={(event) => setBody(event.target.value)} required />
                                                 <hr/>
                                                 <div className="col-lg-12">
-                                                    <input name="image" type="file"/>
+                                                    <input type="file"  onChange={handleFileInput} multiple />
                                                 </div>
+                                                <div style={{
+                                                    display : "flex",
+                                                    alignItems: "center",
+                                                    gap : "8px"
+                                                }}>
+
+                                                {
+                                                    images.map((image, k) => (
+                                                        <div key={k} >
+                                                            <img src={"http://localhost:8000/uploads/" + image}
+                                                             style={{
+                                                                 width : "100px",
+                                                                 borderRadius : "1rem"
+                                                             }}
+                                                            />
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
                                                 <button className="submit" type="submit">
                                                     SEND
                                                 </button>
@@ -131,4 +198,4 @@ const Contact = () => {
     );
 };
 
-export default Contact;
+export default Blog;
