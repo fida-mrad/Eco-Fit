@@ -4,9 +4,25 @@ import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import GoogleMap from "../../components/google-map"
+import React, { useRef } from 'react';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   let { pathname } = useLocation();
+
+  const form = useRef()
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs.sendForm('service_gy4xd98', 'template_jusucix', form.current, 'PsM4AY4Z_6eEMS6hp')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+      e.target.reset()
+  };
 
   return (
     <Fragment>
@@ -102,13 +118,15 @@ const Contact = () => {
                   <div className="contact-title mb-30">
                     <h2>Get In Touch</h2>
                   </div>
-                  <form className="contact-form-style">
+                  
+                  
+                  <form ref={form} onSubmit={sendEmail} className="contact-form-style">
                     <div className="row">
                       <div className="col-lg-6">
-                        <input name="name" placeholder="Name*" type="text" />
+                        <input name="user_name" placeholder="Name*" type="text" />
                       </div>
                       <div className="col-lg-6">
-                        <input name="email" placeholder="Email*" type="email" />
+                        <input name="user_email" placeholder="Email*" type="email" />
                       </div>
                       <div className="col-lg-12">
                         <input
@@ -141,3 +159,5 @@ const Contact = () => {
 };
 
 export default Contact;
+
+
