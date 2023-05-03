@@ -201,8 +201,9 @@ exports.deleteBlog = (req, res) => {
 //*************************************Commentaires*******************************************************
 // Ajouter un commentaire à un blog
 exports.addComment = async (req, res) => {
-    const { author, text } = req.body;
+    const { id, text } = req.body;
     const { blogId } = req.params;
+    console.log(req.body)
 
     try {
         const blog = await Blog.findById(blogId);
@@ -210,7 +211,7 @@ exports.addComment = async (req, res) => {
             return res.status(404).json({ error: 'Blog non trouvé' });
         }
 
-        const user = await User.findById(author);
+        const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ error: 'Utilisateur non trouvé' });
         }

@@ -16,7 +16,7 @@ router.put('/:blogId', authClient, blogController.updateBlog);
 router.delete('/:blogId', authClient,blogController.deleteBlog);
 
 // Routes pour les commentaires
-router.post('/:blogId/comments',blogController.addComment);
+router.post('/:blogId/comments',authClient,blogController.addComment);
 router.put('/:blogId/comments/:commentId', authClient,blogController.updateComment);
 router.delete('/:blogId/comments/:commentId',authClient, blogController.deleteComment);
 

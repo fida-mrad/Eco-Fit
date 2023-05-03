@@ -7,6 +7,7 @@ const SingleBlog = () => {
     const [isLoading, setIsLoading] = useState(true);
     const { id } = useParams();
 
+
     useEffect(() => {
         const fetchBlog = async () => {
             try {

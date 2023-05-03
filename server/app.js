@@ -38,15 +38,11 @@ app.use(bodyParser.json());
 // }))
 
 // Handeling CORS
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-  if (req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-      return res.status(200).json({});
-  }
-  next();
-});
+ app.use((req, res, next) => {
+     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+     res.setHeader('Access-Control-Allow-Credentials', 'true');
+     next();
+ });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
