@@ -9,32 +9,45 @@ const BlogComment = () => {
     const [text, setText] = useState('');
 
 
+    const fetchBlog = async () => {
+        try {
+            const response = await blogsController.getBlogById(id);
+            console.log(response.data);
+            setBlog(response.data);
+            setIsLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleDelete = async (commentId) => {
+        try {
+            const response = await blogsController.deleteComment(id, commentId);
+            console.log(response);
+            fetchBlog();
+        } catch (error) {
+            console.error(error);
+            alert('Failed to delete Comment. Please try again.');
+        }
+    };
+
     const handleSubmit = async (event) => {
+        event.preventDefault();
         try {
             let data = {
-                text: text // Ajouter text ici
+                text: text
             }
             const response = await blogsController.addComment(id,data);
             console.log(response);
+            setText('');
+            fetchBlog();
         } catch (error) {
             console.error(error);
             alert('Failed to add Comment. Please try again.');
         }
     }
 
-
     useEffect(() => {
-        const fetchBlog = async () => {
-            try {
-                const response = await blogsController.getBlogById(id);
-                console.log(response.data);
-                setBlog(response.data);
-                setIsLoading(false);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
         fetchBlog();
     }, [id]);
 
@@ -49,7 +62,7 @@ const BlogComment = () => {
                             {index % 2 === 0 ? <div className="single-comment-wrapper mt-35">
                                 <div className="blog-comment-img">
                                     <img
-                                        src={process.env.PUBLIC_URL + "/assets/img/blog/comment-1.jpg"}
+                                        src={process.env.PUBLIC_URL + "/assets/img/blog/60111.jpg"}
                                         alt=""
                                     />
                                 </div>
@@ -59,20 +72,24 @@ const BlogComment = () => {
                                     <p>
                                         {c.text}
                                     </p>
+                                    <button onClick={() => handleDelete(c._id)}>Delete</button>
                                 </div>
                             </div> : <div className="single-comment-wrapper mt-50 ml-120">
                                 <div className="blog-comment-img">
                                     <img
-                                        src={process.env.PUBLIC_URL + "/assets/img/blog/comment-2.jpg"}
+                                        src={process.env.PUBLIC_URL + "/assets/img/blog/60111.jpg"}
                                         alt=""
                                     />
                                 </div>
                                 <div className="blog-comment-content">
                                     <h4>{c.author}</h4>
                                     <span>{formattedDate}</span>
-                                    <p>{c.text}{" "}
+                                    <p>{c.text}
                                     </p>
+
+                                    <button className="form-submit" onClick={() => handleDelete(c._id)}>Delete</button>
                                 </div>
+
                             </div>}
 
 

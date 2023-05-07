@@ -27,7 +27,7 @@ const BlogStandard = () => {
         <div className="blog-area pt-100 pb-100">
           <div className="container">
             <div className="row flex-row-reverse">
-              <div className="col-lg-9">
+              <div className="col-lg-12">
                 <div className="ml-20">
                   <div className="row">
                     {/* blog posts */}
@@ -40,7 +40,7 @@ const BlogStandard = () => {
               </div>
               <div className="col-lg-3">
                 {/* blog sidebar */}
-                <BlogSidebar />
+
               </div>
             </div>
           </div>

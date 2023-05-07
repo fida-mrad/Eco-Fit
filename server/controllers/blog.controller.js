@@ -152,6 +152,23 @@ exports.getBlogById = (req, res) => {
         });
 };
 
+// recuperer tous les blog sauf current blog !!!
+
+exports.getAllBlogsExceptCurrent = (req, res) => {
+    const { currentBlogId } = req.params;
+
+    Blog.find({ _id: { $ne: currentBlogId } })
+        .then(blogs => {
+            res.status(200).json(blogs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: 'Une erreur est survenue lors de la récupération des blogs.'
+            });
+        });
+};
+
 // Mettre à jour un blog
 exports.updateBlog = (req, res) => {
     const { blogId } = req.params;
