@@ -48,9 +48,9 @@ const BlogPosts = () => {
                                 </ul>
                             </div>
                             <h4>
-                                <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>{blog.title}</Link>
+                                <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>{blog.title.substr(0, 30)}{blog.title.length > 30 ? "..." : ""}</Link>
                             </h4>
-                            <p>{blog.description}</p>
+                            <p>{blog.description.substr(0, 60)}{blog.description.length > 60 ? "..." : ""}</p>
                             <div className="blog-share-comment">
                                 <div className="blog-btn-2">
                                     <Link to={process.env.PUBLIC_URL + `/blog-details-standard/${blog._id}`}>read more</Link>

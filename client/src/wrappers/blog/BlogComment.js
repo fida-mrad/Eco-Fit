@@ -72,7 +72,7 @@ const BlogComment = () => {
                                     <p>
                                         {c.text}
                                     </p>
-                                    <button onClick={() => handleDelete(c._id)}>Delete</button>
+                                    <button className="btn btn-danger" onClick={() => handleDelete(c._id)}>Delete</button>
                                 </div>
                             </div> : <div className="single-comment-wrapper mt-50 ml-120">
                                 <div className="blog-comment-img">
@@ -87,7 +87,7 @@ const BlogComment = () => {
                                     <p>{c.text}
                                     </p>
 
-                                    <button className="form-submit" onClick={() => handleDelete(c._id)}>Delete</button>
+                                    <button className="btn btn-danger" onClick={() => handleDelete(c._id)}>Delete</button>
                                 </div>
 
                             </div>}
