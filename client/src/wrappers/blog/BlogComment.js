@@ -1,12 +1,14 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {blogsController} from "../../Services/blogsApi";
+import {useClient} from "../../ClientContext";
 
 const BlogComment = () => {
     const {id} = useParams();
     const [blog, setBlog] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [text, setText] = useState('');
+    const {client} = useClient();
 
 
     const fetchBlog = async () => {
@@ -72,7 +74,10 @@ const BlogComment = () => {
                                     <p>
                                         {c.text}
                                     </p>
-                                    <button className="btn btn-danger" onClick={() => handleDelete(c._id)}>Delete</button>
+                                    { c.author === client.data.firstname  + ' ' + client.data.lastname &&
+                                        <button className="btn btn-danger"
+                                                onClick={() => handleDelete(c._id)}> Delete </button>
+                                    }
                                 </div>
                             </div> : <div className="single-comment-wrapper mt-50 ml-120">
                                 <div className="blog-comment-img">
@@ -87,7 +92,10 @@ const BlogComment = () => {
                                     <p>{c.text}
                                     </p>
 
-                                    <button className="btn btn-danger" onClick={() => handleDelete(c._id)}>Delete</button>
+                                    { c.author === client.data.firstname  + ' ' + client.data.lastname &&
+                                        <button className="btn btn-danger"
+                                             onClick={() => handleDelete(c._id)}> Delete </button>
+                                    }
                                 </div>
 
                             </div>}
