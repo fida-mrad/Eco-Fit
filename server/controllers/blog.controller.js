@@ -93,6 +93,23 @@ exports.getBlogById = (req, res) => {
         });
 };
 
+// recuperer tous les blog sauf current blog !!!
+
+exports.getAllBlogsExceptCurrent = (req, res) => {
+    const { currentBlogId } = req.params;
+
+    Blog.find({ _id: { $ne: currentBlogId } })
+        .then(blogs => {
+            res.status(200).json(blogs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: 'Une erreur est survenue lors de la récupération des blogs.'
+            });
+        });
+};
+
 // Mettre à jour un blog
 exports.updateBlog = (req, res) => {
     const { blogId } = req.params;
@@ -142,8 +159,9 @@ exports.deleteBlog = (req, res) => {
 //*************************************Commentaires*******************************************************
 // Ajouter un commentaire à un blog
 exports.addComment = async (req, res) => {
-    const { author, text } = req.body;
+    const { id, text } = req.body;
     const { blogId } = req.params;
+    console.log(req.body)
 
     try {
         const blog = await Blog.findById(blogId);
@@ -151,7 +169,7 @@ exports.addComment = async (req, res) => {
             return res.status(404).json({ error: 'Blog non trouvé' });
         }
 
-        const user = await User.findById(author);
+        const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ error: 'Utilisateur non trouvé' });
         }

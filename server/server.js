@@ -12,6 +12,7 @@ const dotenv = require('dotenv').config()
 const stripe = require('stripe')(process.env.STRIPE_SERCRET_KEY);
 
 const DB = require('./config/dbconnection')
+const path = require("path");
 
 
 const load = async () => {
@@ -67,14 +68,24 @@ app.use(express.urlencoded({ extended: true }));
     app.use(passport.session());
 
     // Handeling CORS
-    app.use((req, res, next) => {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Headers', '*');
-        if (req.method === 'OPTIONS') {
-            res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-            return res.status(200).json({});
-        }
-        next();
+    const corsOptions = {
+        origin: "http://localhost:3000",
+        credentials: true, //access-control-allow-credentials:true
+        optionSuccessStatus: 200,
+        methods: "GET, PUT, POST, DELETE",
+        allowedHeaders: "Content-Type,Authorization",
+        exposedHeaders: "Content-Type,Authorization",
+    };
+    app.use(cors(corsOptions));
+
+
+
+// app.use('/uploads', express.static('uploads'));
+    app.use("/images/:path/:filename", (req, res) => {
+        const filename = req.params.filename;
+        // const filePath = path.join(__dirname, 'uploads',filename);
+        const filePath = path.join(__dirname,req.params.path,filename);
+        res.sendFile(filePath);
     });
 
     // Connecting to the routes

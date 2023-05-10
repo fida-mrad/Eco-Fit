@@ -1,44 +1,59 @@
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+import {blogsController} from "../../Services/blogsApi";
+import {Fragment, useEffect, useState} from "react";
 
-const BlogFeaturedSingle = ({ singlePost }) => {
-  return (
-    <div className="blog-wrap mb-30 scroll-zoom">
-      <div className="blog-img">
-        <Link to={process.env.PUBLIC_URL + singlePost.url}>
-          <img src={process.env.PUBLIC_URL + singlePost.image} alt="" />
-        </Link>
-        <div className="blog-category-names">
-          {singlePost.category.map((singleCategory, key) => {
-            return (
-              <span className="purple" key={key}>
-                {singleCategory}
-              </span>
-            );
-          })}
-        </div>
-      </div>
-      <div className="blog-content-wrap">
-        <div className="blog-content text-center">
-          <h3>
-            <Link to={process.env.PUBLIC_URL + singlePost.url}>
-              {singlePost.title}
-            </Link>
-          </h3>
-          <span>
-            By{" "}
-            <Link to={process.env.PUBLIC_URL + singlePost.authorUrl}>
-              {singlePost.author}
-            </Link>
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
+const BlogFeaturedSingle = () => {
+    const [blogs, setBlogs] = useState([]);
 
-BlogFeaturedSingle.propTypes = {
-  singlePost: PropTypes.shape({})
+    useEffect(() => {
+        async function fetchBlogs() {
+            try {
+                const response = await blogsController.getBlogs();
+                setBlogs(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchBlogs();
+    }, []);
+
+    // Randomize blogs order and take the first 3 blogs
+    const randomBlogs = blogs.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+    return (
+        <Fragment>
+            {console.log(blogs)}
+            {randomBlogs.map((blog) => (
+                <div className="col-lg-4 col-sm-6" key={blog._id}>
+                    <div className="blog-wrap mb-30 scroll-zoom">
+                        <div className="blog-img">
+                            <Link to={process.env.PUBLIC_URL}>
+                                <img
+                                    src={"http://localhost:8000/uploads/" + blog.images[0]}
+                                    alt=""
+                                    style={{
+                                        width: "370px",
+                                        height: "270px",
+                                        objectFit: "cover"
+                                    }}
+                                />
+                            </Link>
+                        </div>
+                        <div className="blog-content-wrap">
+                            <div className="blog-content text-center">
+                                <h3>
+                                </h3>
+                                <span>
+                                    {blog.title}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </Fragment>
+    );
 };
 
 export default BlogFeaturedSingle;

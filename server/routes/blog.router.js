@@ -14,9 +14,10 @@ router.post('/addBlog'  ,blogController.createBlog);
 router.get('/:blogId', blogController.getBlogById);
 router.put('/:blogId', authClient, blogController.updateBlog);
 router.delete('/:blogId', authClient,blogController.deleteBlog);
+router.get('/Tous/:currentBlogId' , blogController.getAllBlogsExceptCurrent)
 
 // Routes pour les commentaires
-router.post('/:blogId/comments',blogController.addComment);
+router.post('/:blogId/comments',authClient,blogController.addComment);
 router.put('/:blogId/comments/:commentId', authClient,blogController.updateComment);
 router.delete('/:blogId/comments/:commentId',authClient, blogController.deleteComment);
 

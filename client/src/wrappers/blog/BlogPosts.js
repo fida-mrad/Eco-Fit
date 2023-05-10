@@ -28,6 +28,11 @@ const BlogPosts = () => {
                                 <img
                                     src={ "http://localhost:8000/uploads/" + blog.images[0]}
                                     alt=""
+                                    style={{
+                                        width : "750px",
+                                        height : "440px",
+                                        objectFit: "cover"
+                                    }}
                                 />
                             </Link>
                         </div>
@@ -37,15 +42,15 @@ const BlogPosts = () => {
                                     <li>{blog.createdAt}</li>
                                     <li>
                                         <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>
-                                            4 <i className="fa fa-comments-o" />
+                                            {blog?.comments?.length} <i className="fa fa-comments-o" />
                                         </Link>
                                     </li>
                                 </ul>
                             </div>
                             <h4>
-                                <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>{blog.title}</Link>
+                                <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>{blog.title.substr(0, 30)}{blog.title.length > 30 ? "..." : ""}</Link>
                             </h4>
-                            <p>{blog.description}</p>
+                            <p>{blog.description.substr(0, 60)}{blog.description.length > 60 ? "..." : ""}</p>
                             <div className="blog-share-comment">
                                 <div className="blog-btn-2">
                                     <Link to={process.env.PUBLIC_URL + `/blog-details-standard/${blog._id}`}>read more</Link>

@@ -20,10 +20,17 @@ export const blogsController = {
                 return err.response;
             });
     },
+    async getAllBlogsExceptCurrent(currentId){
+        return await axios.get(`${url}/blogs/Tous/${currentId}`, { withCredentials: true });
+    },
 
 
     async addComment(blogId, data) {
         return axios.post(`${url}/blogs/${blogId}/comments`, data, { withCredentials: true });
+    },
+
+    async deleteComment (blogId , commentId){
+        return axios.delete(`${url}/blogs/${blogId}/comments/${commentId}`,  { withCredentials: true });
     }
 
 }

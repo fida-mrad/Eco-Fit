@@ -7,6 +7,7 @@ const SingleBlog = () => {
     const [isLoading, setIsLoading] = useState(true);
     const { id } = useParams();
 
+
     useEffect(() => {
         const fetchBlog = async () => {
             try {
@@ -38,10 +39,10 @@ const SingleBlog = () => {
 
                     <div className="blog-meta-2">
                         <ul>
-                            <li>22 April, 2018</li>
+                            <li>{blog.createdAt}</li>
                             <li>
                                 <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>
-                                    4 <i className="fa fa-comments-o" />
+                                    {blog?.comments?.length} <i className="fa fa-comments-o" />
                                 </Link>
                             </li>
                         </ul>
