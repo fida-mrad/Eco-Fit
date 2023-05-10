@@ -1,4 +1,4 @@
-const Blog = require('../models/Blog');
+const Blog = require('../models/blog');
 const User = require('../models/client');
 const formildable = require("formidable")
 const multer = require("multer")
@@ -38,19 +38,7 @@ exports.createBlog = async (req, res) => {
     let author = id
 
 
-//    await blog.save()
-//         .then(result => {
-//             res.status(201).json({
-//                 message: 'Le blog a été créé avec succès.',
-//                 blog: result
-//             });
-//         })
-//         .catch(err => {
-//             console.log(err);
-//             res.status(500).json({
-//                 message: 'Une erreur est survenue lors de la création du blog.'
-//             });
-//         });
+
 
     try {
         const blog = await Blog.create({
@@ -69,54 +57,7 @@ exports.createBlog = async (req, res) => {
 
 };
 
-// exports.createBlog = (req, res) => {
-//     let form = new formildable.IncomingForm()
-//     form.keepExtensions = true
-//     form.parse(req, (err, fields, files) => {
-//         if (err) {
-//             return res.status(400).json({
-//                 error: "Image could not be uploaded"
-//             })
-//         }
-//         //check for all fields
-//         const {
-//             title, description, description2,
-//             description3, body
-//         } = fields
-//         if (!title || !description
-//             || !description2 || !description3 || !body)
-//             return res.status(400).json({
-//                 error: "All Fields are required "
-//             })
-//
-//
-//         let blog = new Blog(fields)
-//
-//         if (files.images) {
-//             // console.log('FILES PHOTO :', files.photo)
-//             if (files.images.size > 1000000) {
-//                 return res.status(400).json({
-//                     error: "Image should be less than 1mb in size"
-//                 })
-//             }
-//             blog.images.data = fs.readFileSync(files.images.filepath)
-//             blog.images.contentType = files.images.type
-//         }
-//
-//         blog.save()
-//             .then(result => {
-//                 res.json(result)
-//             })
-//             .catch(err => {
-//                 return res.status(400).json({
-//                     error: errorHandler(err)
-//                 })
-//             })
-//     })
-// };
 
-
-// Récupérer tous les blogs
 exports.getAllBlogs = (req, res) => {
     Blog.find()
         .then(blogs => {
